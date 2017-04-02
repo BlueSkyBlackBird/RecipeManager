@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="output" path="bin"/>
+	<classpathentry kind="src" path="src/main/java"/>
+	<classpathentry kind="src" path="src/main/resources"/>
+	<classpathentry kind="src" path="src/test/java"/>
+	<classpathentry kind="src" path="src/test/resources"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER" exported="true"/>
+	<classpathentry sourcepath="C:/Users/Nico/.gradle/caches/modules-2/files-2.1/com.fasterxml.jackson.core/jackson-core/2.9.0.pr2/2fcc8f7ba794773507c6e231cafb922c3ae935dd/jackson-core-2.9.0.pr2-sources.jar" kind="lib" path="C:/Users/Nico/.gradle/caches/modules-2/files-2.1/com.fasterxml.jackson.core/jackson-core/2.9.0.pr2/8e85d13e132c68045850f9d99fc89f1a434a97ee/jackson-core-2.9.0.pr2.jar" exported="true"/>
+	<classpathentry sourcepath="C:/Users/Nico/.gradle/caches/modules-2/files-2.1/com.fasterxml.jackson.core/jackson-databind/2.9.0.pr2/6959e61c0c44665a92969e9a3649f32f0220e45a/jackson-databind-2.9.0.pr2-sources.jar" kind="lib" path="C:/Users/Nico/.gradle/caches/modules-2/files-2.1/com.fasterxml.jackson.core/jackson-databind/2.9.0.pr2/2d81a95387c540ee9c6fd9ad6ad5bee4fa2412e/jackson-databind-2.9.0.pr2.jar" exported="true"/>
+	<classpathentry sourcepath="C:/Users/Nico/.gradle/caches/modules-2/files-2.1/com.fasterxml.jackson.core/jackson-annotations/2.9.0.pr2/aeee389f1c0fb5442b866a084c1d70d34192eb77/jackson-annotations-2.9.0.pr2-sources.jar" kind="lib" path="C:/Users/Nico/.gradle/caches/modules-2/files-2.1/com.fasterxml.jackson.core/jackson-annotations/2.9.0.pr2/de9795efb880669caace5d3991de81ca197b69fc/jackson-annotations-2.9.0.pr2.jar" exported="true"/>
+	<classpathentry sourcepath="C:/Users/Nico/.gradle/caches/modules-2/files-2.1/log4j/log4j/1.2.17/677abe279b68c5e7490d6d50c6951376238d7d3e/log4j-1.2.17-sources.jar" kind="lib" path="C:/Users/Nico/.gradle/caches/modules-2/files-2.1/log4j/log4j/1.2.17/5af35056b4d257e4b64b9e8069c0746e8b08629f/log4j-1.2.17.jar" exported="true"/>
+	<classpathentry sourcepath="C:/Users/Nico/.gradle/caches/modules-2/files-2.1/junit/junit/4.11/28e0ad201304e4a4abf999ca0570b7cffc352c3c/junit-4.11-sources.jar" kind="lib" path="C:/Users/Nico/.gradle/caches/modules-2/files-2.1/junit/junit/4.11/4e031bb61df09069aeb2bffb4019e7a5034a4ee0/junit-4.11.jar" exported="true"/>
+	<classpathentry sourcepath="C:/Users/Nico/.gradle/caches/modules-2/files-2.1/org.hamcrest/hamcrest-core/1.3/1dc37250fbc78e23a65a67fbbaf71d2e9cbc3c0b/hamcrest-core-1.3-sources.jar" kind="lib" path="C:/Users/Nico/.gradle/caches/modules-2/files-2.1/org.hamcrest/hamcrest-core/1.3/42a25dc3219429f0e5d060061f71acb49bf010a0/hamcrest-core-1.3.jar" exported="true"/>
+</classpath>

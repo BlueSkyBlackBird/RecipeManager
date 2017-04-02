@@ -1,0 +1,130 @@
+apply plugin: "java"
+apply plugin: "eclipse"
+apply plugin: "application"
+
+import java.util.regex.Pattern
+
+defaultTasks 'clean', 'incrementBuildNumber'
+
+project.ext{
+	configFile = file('project.properties')
+	config = loadConfig(configFile)
+}
+mainClassName = "de.nj.recipemanager.RecipeManagerMain"
+archivesBaseName = project.name + " " + project.ext.config.version
+
+
+jar {
+    manifest {
+        attributes('Implementation-Title': project.name,
+                   'Implementation-Version': project.ext.config.version,
+				   'Main-Class': project.mainClassName,
+				   'Created-by': "(njans)")
+    }
+	// Add all dependencies into the jar 
+	from {
+		configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
+  }
+}
+
+processResources{
+	from('src/main/resources') {
+        include 'config.properties'
+		expand 'version' : project.ext.config.version
+    }
+}
+
+repositories {
+    mavenCentral()
+	mavenLocal()
+	jcenter()
+}
+
+dependencies {
+    compile "com.fasterxml.jackson.core:jackson-core:2.9.0.pr2"
+    compile "com.fasterxml.jackson.core:jackson-databind:2.9.0.pr2"
+    compile "com.fasterxml.jackson.core:jackson-annotations:2.9.0.pr2"
+	compile "log4j:log4j:1.2.17"
+ 
+    testCompile "junit:junit:4.11"
+}
+
+task showReport (type:Exec){	
+	workingDir './build/reports/tests'
+	commandLine 'cmd', '/c', 'start index.html'
+}
+
+task runOtherMain(type: JavaExec) <<{
+	description "Runs the main class"
+	classpath sourceSets.main.runtimeClasspath
+	main = 'de.nj.recipemanager.control.RecipeManager'	
+}
+
+task incrementMajorVersionNumber() <<{
+	changeVersion(1,0,0,0)
+	printVersionNumber()
+}
+
+task incrementMinorVersionNumber() <<{
+	changeVersion(0,1,0,0)
+	printVersionNumber()
+}
+
+task incrementPatchVersionNumber() <<{
+	changeVersion(0,0,1,0)
+	printVersionNumber()
+}
+
+task incrementBuildNumber() << {
+	changeVersion(0,0,0,1)
+	printVersionNumber()
+}
+
+build.finalizedBy incrementBuildNumber
+
+def loadConfig(File file) {
+    file.withReader {
+        def properties = new Properties()
+        properties.load(it)
+        return (new ConfigSlurper().parse(properties))
+    }
+}
+
+def saveConfig(Properties properties, File file) {
+	file.withWriter {
+		properties.store(it,"")
+	}
+}
+
+def printVersionNumber(){
+	println ""
+	println "------------------------------------------"
+	println "Build: ${project.ext.config.version}"
+	println "------------------------------------------"
+}
+
+def changeVersion(int major, int minor, int patch, int build){
+	if (major < 0 || minor < 0 || patch < 0 || build < 0) return
+
+	def resetBuildNumber = (major + minor + patch) > 0
+	
+	def patternVersionNumber = Pattern.compile("(\\d+)\\.(\\d+)\\.(\\d+)-(\\d+)")
+	def matcherVersionNumber = patternVersionNumber.matcher(project.ext.config.version)
+	matcherVersionNumber.find()
+	
+	def majorVersion = Integer.parseInt(matcherVersionNumber.group(1))
+    def minorVersion = Integer.parseInt(matcherVersionNumber.group(2))
+    def patchVersion = Integer.parseInt(matcherVersionNumber.group(3))
+	def buildVersion = (resetBuildNumber)? 0: Integer.parseInt(matcherVersionNumber.group(4))
+	
+	def newVersionNumber = 
+		(majorVersion + major) + "." + 
+		(minorVersion + minor) + "." + 
+		(patchVersion + patch) + "-" +
+		String.format("%03d", (buildVersion + build))
+		
+	project.ext.config.version = newVersionNumber
+	saveConfig(project.ext.config.toProperties(), project.ext.configFile)
+}
+
+

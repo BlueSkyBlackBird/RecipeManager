@@ -1,0 +1,39 @@
+[ {
+  "cookingDescription" : "Du musst den Nippel durch die Lasche ziehen und dann mit der Kurbel ganz nach oben drehen!",
+  "cookingTimeInMinutes" : 0,
+  "id" : "ea0e5877-ec98-4cf6-aeca-c175443f0686",
+  "ingredientInformation" : [ {
+    "ingredientName" : "Basilikum",
+    "unitOfQuantity" : "Gramm",
+    "amount" : 5.0
+  }, {
+    "ingredientName" : "Ei",
+    "unitOfQuantity" : "StÃ¼ck",
+    "amount" : 2.0
+  }, {
+    "ingredientName" : "Mehl",
+    "unitOfQuantity" : "EsslÃ¶ffel",
+    "amount" : 4.0
+  } ],
+  "name" : "Test 1",
+  "tags" : [ "Lecker!" ]
+}, {
+  "cookingDescription" : "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.",
+  "cookingTimeInMinutes" : 0,
+  "id" : "72e32c3c-1dcc-4db8-8353-3888fb29a4d5",
+  "ingredientInformation" : [ {
+    "ingredientName" : "Zucker",
+    "unitOfQuantity" : "Gramm",
+    "amount" : 500.0
+  }, {
+    "ingredientName" : "Zimt",
+    "unitOfQuantity" : "Gramm",
+    "amount" : 3.0
+  }, {
+    "ingredientName" : "Mehl",
+    "unitOfQuantity" : "Esslï¿½ffel",
+    "amount" : 4.0
+  } ],
+  "name" : "Test 2",
+  "tags" : [ "Meh!" ]
+} ]

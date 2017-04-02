@@ -1,0 +1,7 @@
+eclipse.preferences.version=1
+encoding//src/main/resources/config.properties=ISO-8859-1
+encoding//src/main/resources/localisation/language_de.properties=ISO-8859-1
+encoding//src/main/resources/localisation/language_en.properties=ISO-8859-1
+encoding//src/main/resources/log4j.properties=ISO-8859-1
+encoding//src/main/resources/user.properties=ISO-8859-1
+encoding/<project>=UTF-8
