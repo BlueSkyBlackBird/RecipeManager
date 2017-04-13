@@ -14,7 +14,7 @@ public interface PresenterUICallback
 {
     public void onUIWasClosed();
 
-    public void onChangeRecipe(Recipe changedRecipe);
+    public void onChangeRecipe(Recipe oldRecipe, Recipe newRecipe);
 
     /**
      *

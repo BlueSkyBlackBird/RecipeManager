@@ -226,7 +226,7 @@ public class FXUIPresenter implements Presenter, PresenterUICallback, PresenterM
      * de.nj.recipemanager.model.recipe.Recipe)
      */
     @Override
-    public void onChangeRecipe(Recipe changedRecipe)
+    public void onChangeRecipe(Recipe oldRecipe, Recipe newRecipe)
     {
         // TODO Auto-generated method stub
 

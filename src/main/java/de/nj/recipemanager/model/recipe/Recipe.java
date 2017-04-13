@@ -8,6 +8,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
+import de.nj.recipemanager.misc.RecipeHelper;
 
 /**
  * @author Nico
@@ -41,6 +42,21 @@ public class Recipe
         cookingDescription = "";
         tags = new HashSet<>();
         cookingTimeInMinutes = 0;
+    }
+
+    /**
+     * This is the default constructor of this class.
+     *
+     * @param selectedRecipe
+     */
+    public Recipe(Recipe recipe)
+    {
+        this.id = recipe.id;
+        this.name = recipe.name;
+        this.cookingDescription = recipe.cookingDescription;
+        this.cookingTimeInMinutes = recipe.cookingTimeInMinutes;
+        this.tags = new HashSet<>(recipe.getTags());
+        this.ingredientInformation = RecipeHelper.copyIngredients(recipe.ingredientInformation);
     }
 
     public void addIngredient(IngredientInformation pair)

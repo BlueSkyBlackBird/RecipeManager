@@ -9,8 +9,6 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
-import java.util.stream.Collectors;
 import de.nj.recipemanager.model.interfaces.PresenterModelCallback;
 import de.nj.recipemanager.model.interfaces.RecipeBook;
 import de.nj.recipemanager.model.recipe.Recipe;
@@ -47,7 +45,6 @@ public class DefaultRecipeBook implements RecipeBook
     @Override
     public void addRecipe(Recipe recipe)
     {
-        adjustTags(recipe);
         recipeList.add(recipe);
 
         for (String tag : recipe.getTags())
@@ -58,29 +55,7 @@ public class DefaultRecipeBook implements RecipeBook
         presenterCallback.onRecipeAdded(recipe);
     }
 
-    protected String adjustTag(String tag)
-    {
-        return capitalizeWordsInTag(tag.trim().toLowerCase());
-    }
 
-    protected void adjustTags(Recipe recipe)
-    {
-        Set<String> tags = recipe.getTags();
-        tags = tags.stream()
-                .map(tag -> adjustTag(tag))
-                .collect(Collectors.toSet());
-    }
-
-    protected String capitalizeWordsInTag(String tag)
-    {
-        char[] tagAsArray = tag.toCharArray();
-
-        tagAsArray[1] = Character.toUpperCase(tagAsArray[1]);
-        for (int i = 1; i < tagAsArray.length; i++)
-            if (tagAsArray[i - 1] == ' ')
-                tagAsArray[i] = Character.toUpperCase(tagAsArray[i]);
-        return new String(tagAsArray);
-    }
 
     @Override
     public boolean equals(Object obj)

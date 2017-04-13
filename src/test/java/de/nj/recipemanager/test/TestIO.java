@@ -26,26 +26,29 @@ import junit.framework.TestCase;
  */
 public class TestIO extends TestCase
 {
+    @Override
     @BeforeClass
-    public static void setup()
+    public void setUp()
     {}
 
+    @Override
     @AfterClass
-    public static void teardown()
+    public void tearDown()
     {
-
         try
         {
             Preferences pref = FileIOHandler.loadAndCreateUserPreferenceIfNecesarry("de.nj.recipemanager.TestPref");
             pref.removeNode();
+
+            File f = new File("MyJSONTestFile");
+            f.delete();
+
         }
         catch (BackingStoreException e)
         {
             fail("Cannot clean up preferences: " + e.getMessage());
         }
-
-        File f = new File("MyJSONTestFile");
-        f.delete();
+        System.out.println("Finished Teardown: " + TestIO.class.getName());
     }
 
     public TestIO(String name)
