@@ -101,4 +101,14 @@ public class GeneralModelContainer implements GeneralDataModel
        data.changeRecipe(oldRecipe,newRecipe);
         
     }
+
+    /* (non-Javadoc)
+     * @see de.nj.recipemanager.model.interfaces.GeneralDataModel#deleteRecipe(de.nj.recipemanager.model.recipe.Recipe)
+     */
+    @Override
+    public void removeRecipe(Recipe selectedRecipe)
+    {
+      data.removeRecipe(selectedRecipe);
+        
+    }
 }

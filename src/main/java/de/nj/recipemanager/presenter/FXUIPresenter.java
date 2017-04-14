@@ -3,13 +3,13 @@
  */
 package de.nj.recipemanager.presenter;
 
-
+import java.io.File;
 import java.io.IOException;
 import java.util.Locale;
-import java.util.UUID;
 import org.apache.log4j.Logger;
 import de.nj.recipemanager.gui.RecipeFXUI;
 import de.nj.recipemanager.gui.RecipeUI;
+import de.nj.recipemanager.model.Configuration;
 import de.nj.recipemanager.model.GeneralModelContainer;
 import de.nj.recipemanager.model.interfaces.GeneralDataModel;
 import de.nj.recipemanager.model.interfaces.Presenter;
@@ -26,11 +26,11 @@ import javafx.stage.Stage;
  */
 public class FXUIPresenter implements Presenter, PresenterUICallback, PresenterModelCallback
 {
-    protected static final Logger	LOGGER	= Logger.getLogger(FXUIPresenter.class);
+    protected static final Logger LOGGER = Logger.getLogger(FXUIPresenter.class);
 
-    protected GeneralDataModel	model;
+    protected GeneralDataModel    model;
 
-    protected RecipeUI			ui;
+    protected RecipeUI            ui;
 
     /**
      * This is the default constructor of this class.
@@ -50,44 +50,6 @@ public class FXUIPresenter implements Presenter, PresenterUICallback, PresenterM
 
     /*
      * (non-Javadoc)
-     * @see de.nj.recipemanager.model.interfaces.Presenter#addNewRecipe(de.nj.
-     * recipemanager.model.recipe.Recipe)
-     */
-    @Override
-    public void addNewRecipe(Recipe newRecipe)
-    {
-        // TODO Auto-generated method stub
-
-    }
-
-    /*
-     * (non-Javadoc)
-     * @see
-     * de.nj.recipemanager.model.interfaces.Presenter#changeRecipe(java.util.
-     * UUID, de.nj.recipemanager.model.recipe.Recipe)
-     */
-    @Override
-    public void changeRecipe(UUID id, Recipe change)
-    {
-        // TODO Auto-generated method stub
-
-    }
-
-
-    /*
-     * (non-Javadoc)
-     * @see
-     * de.nj.recipemanager.model.interfaces.Presenter#deleteRecipe(java.util.
-     * UUID)
-     */
-    @Override
-    public void deleteRecipe(UUID id)
-    {
-        // TODO Auto-generated method stub
-
-    }
-
-    /* (non-Javadoc)
      * @see de.nj.recipemanager.control.Controller#end()
      */
     @Override
@@ -105,7 +67,6 @@ public class FXUIPresenter implements Presenter, PresenterUICallback, PresenterM
         }
         catch (IOException e)
         {
-            // TODO
             e.printStackTrace();
         }
 
@@ -120,7 +81,7 @@ public class FXUIPresenter implements Presenter, PresenterUICallback, PresenterM
     @Override
     public void onDeleteRecipe(Recipe selectedRecipe)
     {
-        // TODO Auto-generated method stub
+        model.removeRecipe(selectedRecipe);
 
     }
 
@@ -132,7 +93,7 @@ public class FXUIPresenter implements Presenter, PresenterUICallback, PresenterM
     @Override
     public void onLanguageChanged(Locale oldLocale, Locale newLocale)
     {
-       ui.localise(model.getLocalisationProvider());
+        ui.localise(model.getLocalisationProvider());
     }
 
     /*
@@ -143,7 +104,7 @@ public class FXUIPresenter implements Presenter, PresenterUICallback, PresenterM
     @Override
     public Recipe onNewRecipe()
     {
-        return  model.createAndAddRecipe();
+        return model.createAndAddRecipe();
     }
 
     /*
@@ -177,8 +138,7 @@ public class FXUIPresenter implements Presenter, PresenterUICallback, PresenterM
     @Override
     public void onSaveAll()
     {
-       //FileIOHandler.saveRecipeBookAsJSON(model.getRecipeBook(), model.getConfiguration().getProgramConfig(""));
-
+        saveData(getSaveFilename());
     }
 
     /*
@@ -187,10 +147,16 @@ public class FXUIPresenter implements Presenter, PresenterUICallback, PresenterM
      * de.nj.recipemanager.model.interfaces.PresenterUICallback#onUIWasClosed()
      */
     @Override
-    public void onUIWasClosed()
+    public void onUIisClosing()
     {
-        // TODO Auto-generated method stub
+        
+        saveData(getSaveFilename());
 
+    }
+    
+    protected String getSaveFilename() {
+        Configuration conf = model.getConfiguration();
+        return System.getProperty("user.home") + File.separator + "recipemanager" + File.separator + conf.getUserConfig("recipes.filename") ;
     }
 
     protected void saveData(String fileName)
@@ -198,21 +164,23 @@ public class FXUIPresenter implements Presenter, PresenterUICallback, PresenterM
         try
         {
             FileIOHandler.saveRecipeBookAsJSON(model.getRecipeBook(), fileName);
+            System.out.println("Saved File t: " + getSaveFilename());
         }
         catch (IOException e)
         {
-            // TODO
-            e.printStackTrace();
+            LOGGER.error("Unable to save files to '" + fileName + "' :" + e.getMessage());
         }
 
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
      * @see de.nj.recipemanager.control.Controller#start()
      */
     @Override
     public void start()
     {
+        loadData(getSaveFilename());
         ui.setVisibility(true);
     }
 
@@ -229,8 +197,10 @@ public class FXUIPresenter implements Presenter, PresenterUICallback, PresenterM
 
     }
 
-    /* (non-Javadoc)
-     * @see de.nj.recipemanager.model.interfaces.PresenterModelCallback#onRecipeChanged(de.nj.recipemanager.model.recipe.RecipeChangeContainer)
+    /*
+     * (non-Javadoc)
+     * @see de.nj.recipemanager.model.interfaces.PresenterModelCallback#
+     * onRecipeChanged(de.nj.recipemanager.model.recipe.RecipeChangeContainer)
      */
     @Override
     public void onRecipeChanged(Recipe changedRecipe)

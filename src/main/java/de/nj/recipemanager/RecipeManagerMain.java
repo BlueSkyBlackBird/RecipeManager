@@ -28,8 +28,8 @@ public class RecipeManagerMain extends Application
 
     public static void setupLogging()
     {
-        String fileSep = File.separator;
-        String logDir = System.getProperty("user.home") + fileSep + "logs" + fileSep + "recipe.log";
+        String sep = File.separator;
+        String logDir = System.getProperty("user.home") + sep + "recipemanager" + sep + "logs" + sep + "recipe.log";
 
         try
         {

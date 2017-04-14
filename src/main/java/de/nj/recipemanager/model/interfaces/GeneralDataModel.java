@@ -26,4 +26,6 @@ public interface GeneralDataModel
     public void changeLanguage(Locale oldLocale, Locale newLocale);
 
     public void changeRecipe(Recipe oldRecipe, RecipeChangeContainer newRecipe);
+
+    public void removeRecipe(Recipe selectedRecipe);
 }

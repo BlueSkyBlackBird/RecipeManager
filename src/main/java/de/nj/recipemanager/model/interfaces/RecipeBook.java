@@ -15,10 +15,7 @@ import de.nj.recipemanager.model.recipe.RecipeChangeContainer;
 public interface RecipeBook
 {
 	public void addRecipe(Recipe recipe);
-	
-	/**
-	 * 
-	 */
+
 	public void removeRecipe(Recipe recipe);
 	
 	/**
@@ -26,7 +23,7 @@ public interface RecipeBook
 	 */
 	public List<Recipe> getRecipeListView();
 
-
     public void changeRecipe(Recipe oldRecipe, RecipeChangeContainer newRecipe);
+
 
 }

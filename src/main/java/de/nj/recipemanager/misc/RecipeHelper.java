@@ -85,7 +85,7 @@ public class RecipeHelper
         char[] tagAsArray = string.toCharArray();
 
         if (captialiseFirstCharacter)
-            tagAsArray[1] = Character.toUpperCase(tagAsArray[1]);
+            tagAsArray[0] = Character.toUpperCase(tagAsArray[0]);
         
        for (int i = 1; i < tagAsArray.length; i++)
             if (tagAsArray[i - 1] == prefix)

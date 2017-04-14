@@ -22,12 +22,11 @@ import de.nj.recipemanager.model.recipe.RecipeChangeContainer;
  */
 public class DefaultRecipeBook implements RecipeBook
 {
-    private PresenterModelCallback presenterCallback;
+    private PresenterModelCallback    presenterCallback;
 
-    private List<Recipe>				recipeList;
+    private List<Recipe>              recipeList;
 
     private Map<String, List<Recipe>> tagToRecipeMap;
-
 
     /**
      * This is the default constructor of this class.
@@ -41,7 +40,8 @@ public class DefaultRecipeBook implements RecipeBook
         presenterCallback = callback;
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
      * @see de.nj.recipemanager.model.DataModel#addRecipe(java.lang.String)
      */
     @Override
@@ -57,10 +57,10 @@ public class DefaultRecipeBook implements RecipeBook
         presenterCallback.onRecipeAdded(recipe);
     }
 
-    /* (non-Javadoc)
-     * Return an unmodifiable view on the list containing all recipes known to this model.
+    /*
+     * (non-Javadoc) Return an unmodifiable view on the list containing all
+     * recipes known to this model.
      * @see de.nj.recipemanager.model.DataModel#getRecipes()
-     *
      */
     @Override
     public List<Recipe> getRecipeListView()
@@ -68,7 +68,8 @@ public class DefaultRecipeBook implements RecipeBook
         return Collections.unmodifiableList(recipeList);
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
      * @see de.nj.recipemanager.model.DataModel#removeRecipe(java.lang.String)
      */
     @Override
@@ -79,24 +80,27 @@ public class DefaultRecipeBook implements RecipeBook
         presenterCallback.onRecipeDeleted(recipe);
     }
 
-    /* (non-Javadoc)
-     * @see de.nj.recipemanager.model.interfaces.RecipeBook#changeRecipe(de.nj.recipemanager.model.recipe.Recipe, de.nj.recipemanager.model.recipe.Recipe)
+    /*
+     * (non-Javadoc)
+     * @see de.nj.recipemanager.model.interfaces.RecipeBook#changeRecipe(de.nj.
+     * recipemanager.model.recipe.Recipe,
+     * de.nj.recipemanager.model.recipe.Recipe)
      */
     @Override
     public void changeRecipe(Recipe oldRecipe, RecipeChangeContainer newRecipe)
     {
         // TODO update tags
-        
+
         newRecipe.getTags();
         newRecipe.getIngredientInformation();
         newRecipe.getCookingTimeInMinutes();
-        
+
         oldRecipe.setName(newRecipe.getName());
         oldRecipe.setCookingDescription(newRecipe.getCookingDescription());
         oldRecipe.setIngredientInformation(RecipeHelper.ingredientUICollectionToAdjustedListForRecipe(newRecipe.getIngredientInformation()));
-        oldRecipe.setTags(RecipeHelper.tagsToAdjustedSet(newRecipe.getTags(), ","));
+        oldRecipe.setTags(RecipeHelper.tagsToAdjustedSet(newRecipe.getTags(), "[,\n]"));
         oldRecipe.setCookingTimeInMinutes(RecipeHelper.cookingTimeStringToInt(newRecipe.getCookingTimeInMinutes()));
-        
+
         presenterCallback.onRecipeChanged(oldRecipe);
     }
 
@@ -110,7 +114,7 @@ public class DefaultRecipeBook implements RecipeBook
         if (getClass() != obj.getClass())
             return false;
         DefaultRecipeBook other = (DefaultRecipeBook) obj;
-    
+
         if (recipeList == null)
         {
             if (other.recipeList != null)

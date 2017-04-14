@@ -13,7 +13,7 @@ import de.nj.recipemanager.model.recipe.RecipeChangeContainer;
  */
 public interface PresenterUICallback
 {
-    public void onUIWasClosed();
+    public void onUIisClosing();
 
     public void onChangeRecipe(Recipe oldRecipe, RecipeChangeContainer newRecipe);
 
