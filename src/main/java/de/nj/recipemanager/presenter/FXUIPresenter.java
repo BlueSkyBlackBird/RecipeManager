@@ -16,6 +16,7 @@ import de.nj.recipemanager.model.interfaces.Presenter;
 import de.nj.recipemanager.model.interfaces.PresenterModelCallback;
 import de.nj.recipemanager.model.interfaces.PresenterUICallback;
 import de.nj.recipemanager.model.recipe.Recipe;
+import de.nj.recipemanager.model.recipe.RecipeChangeContainer;
 import javafx.stage.Stage;
 
 /**
@@ -131,8 +132,7 @@ public class FXUIPresenter implements Presenter, PresenterUICallback, PresenterM
     @Override
     public void onLanguageChanged(Locale oldLocale, Locale newLocale)
     {
-        // TODO Auto-generated method stub
-
+       ui.localise(model.getLocalisationProvider());
     }
 
     /*
@@ -143,8 +143,7 @@ public class FXUIPresenter implements Presenter, PresenterUICallback, PresenterM
     @Override
     public Recipe onNewRecipe()
     {
-        // TODO Auto-generated method stub
-        return null;
+        return  model.createAndAddRecipe();
     }
 
     /*
@@ -156,8 +155,7 @@ public class FXUIPresenter implements Presenter, PresenterUICallback, PresenterM
     @Override
     public void onRecipeAdded(Recipe recipe)
     {
-        // TODO Auto-generated method stub
-
+        ui.addRecipeToUI(recipe, true);
     }
 
     /*
@@ -169,8 +167,7 @@ public class FXUIPresenter implements Presenter, PresenterUICallback, PresenterM
     @Override
     public void onRecipeDeleted(Recipe recipe)
     {
-        // TODO Auto-generated method stub
-
+        ui.removeRecipeFromUI(recipe);
     }
 
     /*
@@ -180,7 +177,7 @@ public class FXUIPresenter implements Presenter, PresenterUICallback, PresenterM
     @Override
     public void onSaveAll()
     {
-        // TODO Auto-generated method stub
+       //FileIOHandler.saveRecipeBookAsJSON(model.getRecipeBook(), model.getConfiguration().getProgramConfig(""));
 
     }
 
@@ -226,9 +223,19 @@ public class FXUIPresenter implements Presenter, PresenterUICallback, PresenterM
      * de.nj.recipemanager.model.recipe.Recipe)
      */
     @Override
-    public void onChangeRecipe(Recipe oldRecipe, Recipe newRecipe)
+    public void onChangeRecipe(Recipe oldRecipe, RecipeChangeContainer newRecipe)
     {
-        // TODO Auto-generated method stub
+        model.changeRecipe(oldRecipe, newRecipe);
+
+    }
+
+    /* (non-Javadoc)
+     * @see de.nj.recipemanager.model.interfaces.PresenterModelCallback#onRecipeChanged(de.nj.recipemanager.model.recipe.RecipeChangeContainer)
+     */
+    @Override
+    public void onRecipeChanged(Recipe changedRecipe)
+    {
+        ui.updateRecipeDueToChange(changedRecipe, true);
 
     }
 }

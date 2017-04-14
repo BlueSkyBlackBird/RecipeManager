@@ -80,6 +80,8 @@ public class RecipeHelper
      */
     public static String capitalizeWordsPrefixedBySpearator(String string, char prefix, boolean captialiseFirstCharacter)
     {
+        if (string == null || string.isEmpty()) return "";
+        
         char[] tagAsArray = string.toCharArray();
 
         if (captialiseFirstCharacter)
@@ -118,7 +120,7 @@ public class RecipeHelper
      * @param items
      * @return
      */
-    public static List<IngredientInformation> ingredientUICollectionToListForRecipe(Collection<IngredientInformation> ingredients)
+    public static List<IngredientInformation> ingredientUICollectionToAdjustedListForRecipe(Collection<IngredientInformation> ingredients)
     {
         List<IngredientInformation> newList = new ArrayList<>(ingredients);
         adjustIngredientsForRecipe(newList);
@@ -131,7 +133,8 @@ public class RecipeHelper
      */
     public static List<IngredientInformation> copyIngredients(Collection<IngredientInformation> ingredientInformation)
     {
-        return ingredientInformation.stream()
+        return ingredientInformation
+                .stream()
                 .map(IngredientInformation::copy)
                 .collect(Collectors.toCollection(ArrayList::new));
     }
@@ -142,7 +145,22 @@ public class RecipeHelper
      */
     public static String tagsToString(Set<String> tags)
     {
-        return tags.stream().sorted().reduce((s1,s2) ->s1 + " " + s2).orElse("");
+        return tags
+                .stream()
+                .sorted()
+                .reduce((s1,s2) ->s1 + " " + s2).orElse("");
+    }
+
+    /**
+     * @param tags
+     * @return
+     */
+    public static Set<String> adjustTagsForRecipe(Set<String> tags)
+    {
+        return tags
+                .stream()
+                .map(RecipeHelper::adjustTagForRecipe)
+                .collect(Collectors.toCollection(HashSet::new));
     }
 
 }

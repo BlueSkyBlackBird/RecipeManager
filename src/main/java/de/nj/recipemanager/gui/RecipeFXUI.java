@@ -4,6 +4,7 @@
 package de.nj.recipemanager.gui;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import org.apache.log4j.Logger;
 import de.nj.recipemanager.misc.RecipeHelper;
 import de.nj.recipemanager.model.Configuration;
@@ -12,6 +13,7 @@ import de.nj.recipemanager.model.interfaces.PresenterUICallback;
 import de.nj.recipemanager.model.interfaces.RecipeBook;
 import de.nj.recipemanager.model.recipe.IngredientInformation;
 import de.nj.recipemanager.model.recipe.Recipe;
+import de.nj.recipemanager.model.recipe.RecipeChangeContainer;
 import javafx.application.Platform;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -68,8 +70,8 @@ public class RecipeFXUI implements RecipeUI
             textTime.setText("");
             areaTags.setText("");
             areaPrepDesc.setText("");
-            
-            //TODO tableIngredients
+
+            // TODO tableIngredients
         }
 
         public void displayRecipeInformation(Recipe recipe)
@@ -78,8 +80,16 @@ public class RecipeFXUI implements RecipeUI
             textTime.setText(String.valueOf(recipe.getCookingTimeInMinutes()));
             areaTags.setText(RecipeHelper.tagsToString(recipe.getTags()));
             areaPrepDesc.setText(recipe.getCookingDescription());
-            
+
             // TODO: tableIngredients
+        }
+
+        public void init()
+        {
+            treeRecipes.getSelectionModel().selectedItemProperty().addListener((obs, ov, nv) -> {
+                displaySelectedRecipeElseClear();
+                
+            });
         }
 
         public void layout()
@@ -98,10 +108,17 @@ public class RecipeFXUI implements RecipeUI
             columns.add(new TableColumn<>("3"));
         }
 
-        public void addRecipeToTree(Recipe recipe)
+        public void addRecipeToTree(Recipe recipe, boolean selectRecipe, boolean displayRecipe)
         {
+            TreeItem<Recipe> recipeItem = new TreeItem<>(recipe);
 
-            treeRecipes.getRoot().getChildren().add(new TreeItem<>(recipe));
+            treeRecipes.getRoot().getChildren().add(recipeItem);
+
+            if (selectRecipe)
+            {
+                treeRecipes.getSelectionModel().select(recipeItem);
+                if (displayRecipe) displaySelectedRecipeElseClear();
+            }
         }
 
         private void layoutMenuBar()
@@ -147,8 +164,7 @@ public class RecipeFXUI implements RecipeUI
             TreeItem<Recipe> recipeTreeItem = treeRecipes.getSelectionModel().getSelectedItem();
             Recipe selectedRecipe = recipeTreeItem == null ? null : recipeTreeItem.getValue();
 
-            if (selectedRecipe != null)
-                presenterCallback.onDeleteRecipe(selectedRecipe);
+            if (selectedRecipe != null) presenterCallback.onDeleteRecipe(selectedRecipe);
         }
 
         @FXML
@@ -169,58 +185,78 @@ public class RecipeFXUI implements RecipeUI
         public void onApplyChangesButtonClicked(ActionEvent event)
         {
             Recipe selectedRecipe = getSelectedRecipe();
-            Recipe newRecipe = new Recipe(selectedRecipe);
+            RecipeChangeContainer newRecipe = new RecipeChangeContainer();
             loadUIValuesIntoRecipe(newRecipe);
-            if (selectedRecipe != null)
-                presenterCallback.onChangeRecipe(selectedRecipe, newRecipe);
+            
+            if (selectedRecipe != null) presenterCallback.onChangeRecipe(selectedRecipe, newRecipe);
         }
 
         @FXML
         public void onDiscardChangesButtonClicked(ActionEvent event)
         {
-            
+            displayRecipeIfSelectedElseClear(getSelectedRecipe());
         }
 
         protected boolean doesUIholdAllValuesForRecipe()
         {
             // TODO: check values better
-            return      textName.getText().length() > 0
-                    &&  textTime.getText().length() > 0
-                    &&  areaPrepDesc.getText().length() > 0
+            return textName.getText().length() > 0 && textTime.getText().length() > 0 && areaPrepDesc.getText().length() > 0
                     && tableIngredients.getItems().size() > 0;
         }
 
-        public void loadUIValuesIntoRecipe(Recipe recipe)
+        public void loadUIValuesIntoRecipe(RecipeChangeContainer recipe)
         {
             recipe.setName(textName.getText());
-            recipe.setCookingTimeInMinutes(RecipeHelper.cookingTimeStringToInt(textTime.getText()));
+            recipe.setCookingTimeInMinutes(textTime.getText());
             recipe.setCookingDescription(areaPrepDesc.getText());
-            recipe.setTags(RecipeHelper.tagsToAdjustedSet(areaTags.getText(), ","));
-            recipe.setIngredientInformation(RecipeHelper.ingredientUICollectionToListForRecipe(tableIngredients.getItems()));
+            recipe.setTags(areaTags.getText());
+            recipe.setIngredientInformation(new ArrayList<>(tableIngredients.getItems()));
         }
-        
+
+        public void clearInputFields()
+        {
+            textName.clear();
+            textTime.clear();
+            areaPrepDesc.clear();
+            areaTags.clear();
+            tableIngredients.getItems().clear();
+
+        }
+
         public Recipe getSelectedRecipe()
         {
             TreeItem<Recipe> item = treeRecipes.getSelectionModel().getSelectedItem();
             return item == null ? null : item.getValue();
         }
 
-        public void displaySelectedRecipe()
+        public void displaySelectedRecipeElseClear()
         {
             Recipe selectedRecipe = getSelectedRecipe();
-            
-            if (selectedRecipe != null)
-                displayRecipeInformation(selectedRecipe);
-        }
-        
-        public void displayRecipeIfSelected(Recipe recipe)
-        {
-            Recipe selectedRecipe = getSelectedRecipe();
-            
-            if (selectedRecipe != null && selectedRecipe.equals(recipe))
-                displayRecipeInformation(recipe);
+
+            if (selectedRecipe != null) displayRecipeInformation(selectedRecipe);
+            else clearInputFields();
         }
 
+        public void displayRecipeIfSelectedElseClear(Recipe recipe)
+        {
+            Recipe selectedRecipe = getSelectedRecipe();
+
+            if (selectedRecipe != null && selectedRecipe.equals(recipe))
+                displayRecipeInformation(recipe);
+            else
+                clearInputFields();
+        }
+
+        public void removeReicpe(Recipe recipe)
+        {
+            // TODO: can be optimized
+            TreeItem<Recipe> wantedRecipe = treeRecipes.getRoot().getChildren().stream().filter(t -> t.getValue().equals(recipe)).findFirst().get();
+
+            if (wantedRecipe != null)
+                treeRecipes.getRoot().getChildren().remove(wantedRecipe);
+            else
+                logger.error("Recipe " + recipe.getName() + " could not be deleted because it was not part of the displayed recipe tree!");
+        }
     }
 
     protected static final Logger logger = Logger.getLogger(RecipeFXUI.class);
@@ -264,13 +300,13 @@ public class RecipeFXUI implements RecipeUI
         Platform.exit();
     }
 
-    protected void init(int width, int height, int minWidth, int minHeight, LocalisationProvider lang, RecipeBook data,
-            Configuration config)
+    protected void init(int width, int height, int minWidth, int minHeight, LocalisationProvider lang, RecipeBook data, Configuration config)
     {
         primaryStage.setTitle(config.getProgramConfig("general.name") + " " + config.getProgramConfig("general.version"));
         primaryStage.onCloseRequestProperty().addListener(e -> presenterCallback.onUIWasClosed());
         setMinSize(minWidth, minHeight);
         setSize(width, height);
+        fxcontroller.init();
     }
 
     protected void loadFXML()
@@ -289,6 +325,12 @@ public class RecipeFXUI implements RecipeUI
             logger.error("Exception encountered while loading FXML: " + exception.getMessage());
             throw new RuntimeException(exception);
         }
+    }
+
+    @Override
+    public void localise(LocalisationProvider lang)
+    {
+        localiseLabels(lang);
     }
 
     protected void localiseLabels(LocalisationProvider lang)
@@ -340,9 +382,31 @@ public class RecipeFXUI implements RecipeUI
      * recipe.Recipe)
      */
     @Override
-    public void addRecipeToUI(Recipe recipe)
+    public void addRecipeToUI(Recipe recipe, boolean highlight)
     {
-        fxcontroller.addRecipeToTree(recipe);
+        fxcontroller.addRecipeToTree(recipe, highlight, highlight);
+    }
 
+    /*
+     * (non-Javadoc)
+     * @see
+     * de.nj.recipemanager.gui.RecipeUI#removeRecipeFromUI(de.nj.recipemanager.
+     * model.recipe.Recipe)
+     */
+    @Override
+    public void removeRecipeFromUI(Recipe recipe)
+    {
+        fxcontroller.removeReicpe(recipe);
+
+    }
+
+    /* (non-Javadoc)
+     * @see de.nj.recipemanager.gui.RecipeUI#updateRecipeDueToChange(de.nj.recipemanager.model.recipe.RecipeChangeContainer)
+     */
+    @Override
+    public void updateRecipeDueToChange(Recipe changedRecipe,  boolean highlight)
+    {
+        fxcontroller.displayRecipeIfSelectedElseClear(changedRecipe);
+        
     }
 }

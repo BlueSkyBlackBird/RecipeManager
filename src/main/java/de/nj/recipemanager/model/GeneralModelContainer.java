@@ -9,6 +9,8 @@ import de.nj.recipemanager.model.interfaces.GeneralDataModel;
 import de.nj.recipemanager.model.interfaces.LocalisationProvider;
 import de.nj.recipemanager.model.interfaces.PresenterModelCallback;
 import de.nj.recipemanager.model.interfaces.RecipeBook;
+import de.nj.recipemanager.model.recipe.Recipe;
+import de.nj.recipemanager.model.recipe.RecipeChangeContainer;
 
 /**
  * @author Nico
@@ -24,12 +26,15 @@ public class GeneralModelContainer implements GeneralDataModel
     protected RecipeBook			data;
 
     protected LocalisationProvider	language;
+    
+    protected PresenterModelCallback callback;
 
     /**
      * This is the default constructor of this class.
      */
-    public GeneralModelContainer(PresenterModelCallback callback)
+    public GeneralModelContainer(PresenterModelCallback modelCallback)
     {
+        callback = modelCallback;
         config = new Configuration();
         data = new DefaultRecipeBook(callback);
         language = new ResourceBundleLocalisationProvider("language", Locale.getDefault(), callback);
@@ -64,5 +69,36 @@ public class GeneralModelContainer implements GeneralDataModel
         return data;
     }
 
+    /* (non-Javadoc)
+     * @see de.nj.recipemanager.model.interfaces.GeneralDataModel#createAndAddRecipe()
+     */
+    @Override
+    public Recipe createAndAddRecipe()
+    {
+        Recipe recipe = new Recipe();
+        recipe.setName("<<???>>"); //TODO: Use lang to give a default name
+        data.addRecipe(recipe);
+        return recipe;
+    }
 
+    /* (non-Javadoc)
+     * @see de.nj.recipemanager.model.interfaces.GeneralDataModel#changeLanguage(java.util.Locale, java.util.Locale)
+     */
+    @Override
+    public void changeLanguage(Locale oldLocale, Locale newLocale)
+    {
+       language.setLocale(newLocale);
+       callback.onLanguageChanged(oldLocale, newLocale);
+        
+    }
+
+    /* (non-Javadoc)
+     * @see de.nj.recipemanager.model.interfaces.GeneralDataModel#changeRecipe(de.nj.recipemanager.model.recipe.Recipe, de.nj.recipemanager.model.recipe.Recipe)
+     */
+    @Override
+    public void changeRecipe(Recipe oldRecipe, RecipeChangeContainer newRecipe)
+    {
+       data.changeRecipe(oldRecipe,newRecipe);
+        
+    }
 }

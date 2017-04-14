@@ -19,4 +19,6 @@ public interface PresenterModelCallback
 
 	public void onRecipeDeleted(Recipe recipe);
 
+    public void onRecipeChanged(Recipe newRecipe);
+
 }

@@ -36,4 +36,11 @@ public class DummyPresenterModelCallback implements PresenterModelCallback
 	public void onRecipeDeleted(Recipe recipe)
 	{}
 
+    /* (non-Javadoc)
+     * @see de.nj.recipemanager.model.interfaces.PresenterModelCallback#onRecipeChanged(de.nj.recipemanager.model.recipe.Recipe)
+     */
+    @Override
+    public void onRecipeChanged(Recipe newRecipe)
+    {}
+
 }

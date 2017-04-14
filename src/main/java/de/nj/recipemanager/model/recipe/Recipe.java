@@ -59,6 +59,14 @@ public class Recipe
         this.ingredientInformation = RecipeHelper.copyIngredients(recipe.ingredientInformation);
     }
 
+//    public void changeTo(RecipeChangeContainer newRecipe) {
+//        this.name = newRecipe.getName();
+//        this.cookingDescription = newRecipe.getCookingDescription();
+//        this.cookingTimeInMinutes = newRecipe.getCookingTimeInMinutes();
+//        this.tags = new HashSet<>(newRecipe.getTags());
+//        this.ingredientInformation = RecipeHelper.copyIngredients(newRecipe.getIngredientInformation());
+//    }
+    
     public void addIngredient(IngredientInformation pair)
     {
         ingredientInformation.add(pair);
@@ -155,6 +163,10 @@ public class Recipe
         this.name = name;
     }
 
+    /**
+     * 
+     * @param tags
+     */
     public void setTags(Set<String> tags)
     {
         this.tags = tags;

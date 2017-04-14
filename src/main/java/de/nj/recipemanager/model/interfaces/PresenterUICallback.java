@@ -4,6 +4,7 @@
 package de.nj.recipemanager.model.interfaces;
 
 import de.nj.recipemanager.model.recipe.Recipe;
+import de.nj.recipemanager.model.recipe.RecipeChangeContainer;
 
 /**
  * @author Nico
@@ -14,20 +15,11 @@ public interface PresenterUICallback
 {
     public void onUIWasClosed();
 
-    public void onChangeRecipe(Recipe oldRecipe, Recipe newRecipe);
+    public void onChangeRecipe(Recipe oldRecipe, RecipeChangeContainer newRecipe);
 
-    /**
-     *
-     */
     public Recipe onNewRecipe();
 
-    /**
-     * @param selectedRecipe
-     */
     public void onDeleteRecipe(Recipe selectedRecipe);
 
-    /**
-     *
-     */
     public void onSaveAll();
 }

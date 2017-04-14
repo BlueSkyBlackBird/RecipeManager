@@ -5,6 +5,7 @@ package de.nj.recipemanager.model.interfaces;
 
 import java.util.List;
 import de.nj.recipemanager.model.recipe.Recipe;
+import de.nj.recipemanager.model.recipe.RecipeChangeContainer;
 
 /**
  * @author Nico
@@ -24,5 +25,8 @@ public interface RecipeBook
 	 * Returns a view on the list of recipes. The view is unmodifiable.
 	 */
 	public List<Recipe> getRecipeListView();
+
+
+    public void changeRecipe(Recipe oldRecipe, RecipeChangeContainer newRecipe);
 
 }
